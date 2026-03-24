@@ -10,6 +10,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
-add_executable(Loro src/main.c)
+add_executable(Loro
+    src/main.c
+    src/core/apps.c
+)
 
+target_include_directories(Loro PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(Loro raylib)
