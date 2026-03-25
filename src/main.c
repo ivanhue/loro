@@ -1,13 +1,18 @@
 #include "raylib.h"
 #include "core/apps.h"
 #include "ui/theme.h"
+#include <stdio.h>
 
 int main(void) {
     App apps[MAX_APPS];
     int count = apps_load(apps, MAX_APPS);
     Theme theme;
 
-    theme_load(&theme, "themes/base.ini");
+    int err = theme_load(&theme, "../themes/base.ini");
+    if (err) {
+        printf("Failed theme loading!\n");
+        return 1;
+    }
 
 
     InitWindow(800, 450, "Loro Launcher");
