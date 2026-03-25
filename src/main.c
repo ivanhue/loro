@@ -1,9 +1,14 @@
 #include "raylib.h"
 #include "core/apps.h"
+#include "ui/theme.h"
 
 int main(void) {
     App apps[MAX_APPS];
     int count = apps_load(apps, MAX_APPS);
+    Theme theme;
+
+    theme_load(&theme, "themes/base.ini");
+
 
     InitWindow(800, 450, "Loro Launcher");
     SetTargetFPS(60);
