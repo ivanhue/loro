@@ -16,6 +16,9 @@ typedef struct {
     int horizontalSpacing;
     int verticalSpacing;
 
+    int width;
+    int padding;
+
     Font font;
 } Theme;
 

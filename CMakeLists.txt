@@ -15,6 +15,7 @@ add_executable(Loro
     src/core/apps.c
     src/ui/theme.c
     src/ui/window.c
+    src/ui/search_bar.c
 )
 
 target_include_directories(Loro PRIVATE ${CMAKE_SOURCE_DIR}/include)
