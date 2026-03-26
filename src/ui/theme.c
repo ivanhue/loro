@@ -51,7 +51,7 @@ int theme_load(Theme* theme, char* pathTheme) {
         } else if (strncmp(line, "font=", 5) == 0) {
             char pathFont[512];
             strcpy(pathFont, line+5);
-            theme->font = LoadFont(pathFont);
+            theme->font = LoadFontEx(pathFont, 32, 0, 255);
         } else if (strncmp(line, "width=", 6) == 0) {
             theme->width = strtol(line+6, NULL, 10);
         } else if (strncmp(line, "padding=", 8) == 0) {

@@ -19,7 +19,8 @@ int main(void) {
     // (search bar + apps count total) + (each app)
     int height = 40 + ((2*(theme.fontSize+theme.verticalSpacing))-2 + (MAX_SHOW_APPS*(theme.fontSize-2+theme.verticalSpacing)));
 
-    char value[255];
+    char value[127][4];
+    char utf8String[127*4];
     int letterCount = 0;
     int framesCounter = 0;
     int currentFrame = 0;
@@ -35,7 +36,7 @@ int main(void) {
 
         BeginDrawing();
             draw_window(&theme, apps, count, MAX_SHOW_APPS);
-            draw_search_bar(&theme, value, &framesCounter, &letterCount);
+            draw_search_bar(&theme, value, &framesCounter, &letterCount, utf8String);
         EndDrawing();
     }
 
