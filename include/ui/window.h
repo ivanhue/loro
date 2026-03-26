@@ -2,4 +2,6 @@
 #include "ui/theme.h"
 #include "core/apps.h"
 
-void draw_window(Theme* theme, App *apps, int count);
+#define MAX_SHOW_APPS 10
+
+void draw_window(Theme* theme, App *apps, int count, int max);
