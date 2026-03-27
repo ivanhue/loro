@@ -1,9 +1,12 @@
+#include <stdio.h>
 #include "raylib.h"
+// CORE
 #include "core/apps.h"
+// UI
 #include "ui/theme.h"
 #include "ui/window.h"
 #include "ui/search_bar.h"
-#include <stdio.h>
+#include "ui/apps.h"
 
 int main(void) {
     Theme theme;
@@ -35,8 +38,10 @@ int main(void) {
         update_search_bar(&theme, value, &framesCounter, &letterCount, &currentFrame);
 
         BeginDrawing();
-            draw_window(&theme, apps, count, MAX_SHOW_APPS);
+            draw_window(&theme);
             draw_search_bar(&theme, value, &framesCounter, &letterCount, utf8String);
+            draw_apps_list(&theme, apps, count, MAX_SHOW_APPS);
+            draw_hover(&theme, 2);
         EndDrawing();
     }
 

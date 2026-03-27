@@ -12,10 +12,13 @@ FetchContent_MakeAvailable(raylib)
 
 add_executable(Loro
     src/main.c
+
     src/core/apps.c
+
     src/ui/theme.c
     src/ui/window.c
     src/ui/search_bar.c
+    src/ui/apps.c
 )
 
 target_include_directories(Loro PRIVATE ${CMAKE_SOURCE_DIR}/include)
