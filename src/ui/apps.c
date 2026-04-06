@@ -2,6 +2,7 @@
 #include "ui/theme.h"
 #include "core/apps.h"
 #include <string.h>
+#include <stdio.h>
 
 static int calculateSpace(Theme theme, char* type) {
     if (strcmp(type, "header")) {
@@ -54,4 +55,11 @@ void draw_navigation(Theme* theme, App *currentApps, int* cursor) {
         }
     }
     draw_hover(theme, *cursor);
+}
+
+void open_selected_app(App *currentApps, int* cursor) {
+    if (IsKeyPressed(KEY_ENTER)) {
+        int index = *cursor;
+        launch(&currentApps[index]);
+    }
 }

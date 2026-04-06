@@ -12,3 +12,4 @@ typedef struct {
 } App;
 
 int apps_load(App *out, int max);
+void launch(App *app);

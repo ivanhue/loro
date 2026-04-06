@@ -37,6 +37,7 @@ int main(void) {
         if (!IsWindowFocused()) break;
         framesCounter++;
         update_search_bar(&theme, value, &framesCounter, &letterCount, &currentFrame);
+        open_selected_app(apps, &cursor);
 
         BeginDrawing();
             draw_window(&theme);
