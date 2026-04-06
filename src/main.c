@@ -27,6 +27,7 @@ int main(void) {
     int letterCount = 0;
     int framesCounter = 0;
     int currentFrame = 0;
+    int cursor = 0;
 
     InitWindow(theme.width, height, "Loro Launcher");
     SetTargetFPS(60);
@@ -36,12 +37,13 @@ int main(void) {
         if (!IsWindowFocused()) break;
         framesCounter++;
         update_search_bar(&theme, value, &framesCounter, &letterCount, &currentFrame);
+        open_selected_app(apps, &cursor);
 
         BeginDrawing();
             draw_window(&theme);
             draw_search_bar(&theme, value, &framesCounter, &letterCount, utf8String);
             draw_apps_list(&theme, apps, count, MAX_SHOW_APPS);
-            draw_hover(&theme, 2);
+            draw_navigation(&theme, apps, &cursor);
         EndDrawing();
     }
 

@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "core/apps.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,4 +67,9 @@ int apps_load(App *out, int max) {
     closedir(dir);
     qsort(out, count, sizeof(App), compare_apps);
     return count;
+}
+
+void launch(App *app) {
+    if (!app || app->exec[0] == '\0') return;
+    execlp("sh", "sh", "-c", app->exec, NULL);
 }
