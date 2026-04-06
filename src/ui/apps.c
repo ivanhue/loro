@@ -39,3 +39,19 @@ void draw_hover(Theme* theme, int index) {
     Rectangle app = {appCoordinates.x-4, appCoordinates.y-4, theme->width-2*theme->padding, theme->fontSize+4};
     DrawRectangleLinesEx(app, 2.0, theme->fg);
 }
+
+void draw_navigation(Theme* theme, App *currentApps, int* cursor) {
+    if (IsKeyPressed(KEY_UP)) {
+        *cursor= *cursor - 1;
+        if (*cursor<0) {
+            *cursor = 0;
+        }
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+        *cursor = *cursor + 1;
+        if (*cursor>9) {
+            *cursor = 9;
+        }
+    }
+    draw_hover(theme, *cursor);
+}
