@@ -59,7 +59,7 @@ int main(void) {
             draw_window(&theme);
             draw_search_bar(&theme, value, &framesCounter, &letterCount, utf8String);
             draw_apps_list(&theme, currentApps, currentCount, MAX_SHOW_APPS);
-            draw_navigation(&theme, currentApps, &cursor);
+            draw_navigation(&theme, currentApps, &cursor, &currentCount);
         EndDrawing();
     }
 
