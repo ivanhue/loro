@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "ui/theme.h"
-#include <stdio.h>
+#include "core/apps.h"
+// #include <stdio.h>
 #include <string.h>
 
 static void joinText(char s[127][4], int length, char *dest) {
@@ -10,31 +11,42 @@ static void joinText(char s[127][4], int length, char *dest) {
     }
 }
 
-void update_search_bar(Theme* theme, char value[127][4], int* frames, int* letterCount, int* currentFrame) {
+void update_search_bar(Theme* theme, char value[127][4], int* frames, int* letterCount, int* currentFrame, const App *totalApps, App *currentApps, int totalCount, int* currentCount, int max_out, int* cursor) {
+    bool changed = false;
     int key = GetCharPressed();
+
     while (key > 0) {
-        int byteCount = 2;
-        const char *utf8 = CodepointToUTF8(key, &byteCount);
-        if ((key >= 32) && (key <= 255)) {
+        if (*letterCount < 126 && key >= 32 && key <= 255) {
+            int byteCount = 0;
+            const char *utf8 = CodepointToUTF8(key, &byteCount);
             strcpy(value[*letterCount], utf8);
             (*letterCount)++;
+            changed = true;
         }
-        printf("key pressed: %c | utf8: %s | value: %s\n", key, utf8, value[*letterCount]);
         key = GetCharPressed();
     }
 
     if (IsKeyPressed(KEY_BACKSPACE)) {
-        *currentFrame = *frames;
-        (*letterCount)--;
-        if ((*letterCount)<0) (*letterCount) = 0;
-        strcpy(value[*letterCount], "\0");
-    }
-    if (IsKeyDown(KEY_BACKSPACE)) {
-        if (*frames - *currentFrame >= 20) {
+        if (*letterCount > 0) {
             (*letterCount)--;
-            if ((*letterCount)<0) (*letterCount) = 0;
             strcpy(value[*letterCount], "\0");
+            *currentFrame = *frames;
+            changed = true;
         }
+    }
+    else if (IsKeyDown(KEY_BACKSPACE)) {
+        if ((*frames - *currentFrame) >= 20 && *letterCount > 0) {
+            (*letterCount)--;
+            strcpy(value[*letterCount], "\0");
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        (*cursor) = 0;
+        char fullString[127 * 4] = {0};
+        joinText(value, *letterCount, fullString);
+        update_apps_list(totalApps, currentApps, totalCount, currentCount, fullString, max_out);
     }
 }
 

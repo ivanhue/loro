@@ -11,6 +11,20 @@ static int compare_apps(const void *a, const void *b) {
     return strcmp(app_a->name, app_b->name);
 }
 
+static void print_apps(const App *apps, int length) {
+    printf("\n--- DEBUG APP LIST (Size: %d) ---\n", length);
+
+    if (length <= 0) {
+        printf("Empty list.\n");
+        return;
+    }
+
+    for (int i = 0; i < length; i++) {
+        printf("[%03d] Name: %-20s\n", i, apps[i].name[0] != '\0' ? apps[i].name : "(EMPTY)");
+    }
+    printf("-----------------------------------\n\n");
+}
+
 static void parse_desktop_files(const char *path, App *app) {
     FILE *f = fopen(path, "r");
     if (!f) return;
@@ -72,4 +86,30 @@ int apps_load(App *out, int max) {
 void launch(App *app) {
     if (!app || app->exec[0] == '\0') return;
     execlp("sh", "sh", "-c", app->exec, NULL);
+}
+
+void init_current_apps(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, int max_out) {
+    int to_copy = (countTotal > max_out) ? max_out : countTotal;
+    *countCurrent = to_copy;
+    memcpy(currentApps, totalApps, sizeof(App) * to_copy);
+    print_apps(currentApps, *countCurrent);
+}
+
+void update_apps_list(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, char *search, int max_out) {
+    if (search == NULL || search[0] == '\0') {
+        init_current_apps(totalApps, currentApps, countTotal, countCurrent, max_out);
+        // print_apps(currentApps, *countCurrent);
+        return;
+    }
+    *countCurrent = 0;
+    for (int i=0; i<countTotal; i++) {
+        if (*countCurrent < max_out) {
+            if (strcasestr(totalApps[i].name, search) != NULL) {
+                currentApps[*countCurrent] = totalApps[i];
+                (*countCurrent)++;
+            }
+        } else {
+            break;
+        }
+    }
 }

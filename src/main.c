@@ -8,6 +8,10 @@
 #include "ui/search_bar.h"
 #include "ui/apps.h"
 
+int calculate_window_height(Theme* theme, int currentCount) {
+    return 10 + (theme->padding * 2) + (currentCount * (theme->fontSize + theme->verticalSpacing));
+}
+
 int main(void) {
     Theme theme;
 
@@ -16,11 +20,13 @@ int main(void) {
         printf("Failed theme loading!\n");
         return 1;
     }
-
-    App apps[MAX_APPS];
-    int count = apps_load(apps, MAX_APPS);
+    App _internalApps[MAX_APPS];
+    int totalCount = apps_load(_internalApps, MAX_APPS);
+    const App *totalApps = _internalApps;
+    App currentApps[MAX_SHOW_APPS];
+    int currentCount = (totalCount > MAX_SHOW_APPS) ? MAX_SHOW_APPS : totalCount;
     // (search bar + apps count total) + (each app)
-    int height = 40 + ((2*(theme.fontSize+theme.verticalSpacing))-2 + (MAX_SHOW_APPS*(theme.fontSize-2+theme.verticalSpacing)));
+    int height = calculate_window_height(&theme, currentCount);
 
     char value[127][4];
     char utf8String[127*4];
@@ -32,18 +38,28 @@ int main(void) {
     InitWindow(theme.width, height, "Loro Launcher");
     SetTargetFPS(60);
     SetWindowState(FLAG_WINDOW_UNDECORATED);
+    init_current_apps(totalApps, currentApps, totalCount, &currentCount, MAX_SHOW_APPS);
 
     while (!WindowShouldClose()) {
         if (!IsWindowFocused()) break;
         framesCounter++;
-        update_search_bar(&theme, value, &framesCounter, &letterCount, &currentFrame);
-        open_selected_app(apps, &cursor);
+        int lastCount = currentCount;
+        update_search_bar(&theme, value, &framesCounter, &letterCount, &currentFrame, totalApps, currentApps, totalCount, &currentCount, MAX_SHOW_APPS, &cursor);
+
+        if (currentCount != lastCount) {
+            int newHeight = calculate_window_height(&theme, currentCount);
+
+            if (newHeight < 100) newHeight = 100;
+
+            SetWindowSize(theme.width, newHeight);
+        }
+        open_selected_app(currentApps, &cursor);
 
         BeginDrawing();
             draw_window(&theme);
             draw_search_bar(&theme, value, &framesCounter, &letterCount, utf8String);
-            draw_apps_list(&theme, apps, count, MAX_SHOW_APPS);
-            draw_navigation(&theme, apps, &cursor);
+            draw_apps_list(&theme, currentApps, currentCount, MAX_SHOW_APPS);
+            draw_navigation(&theme, currentApps, &cursor);
         EndDrawing();
     }
 
