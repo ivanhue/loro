@@ -30,23 +30,36 @@ static void parse_desktop_files(const char *path, App *app) {
     FILE *f = fopen(path, "r");
     if (!f) return;
     char line[512];
+    int in_desktop_entry = 0;
+
     while (fgets(line, sizeof(line), f)) {
+        if (line[0] == '[') {
+            in_desktop_entry = strncmp(line, "[Desktop Entry]", 15) == 0;
+            continue;
+        }
+
+        if (!in_desktop_entry) continue;
+
         if (strncmp(line, "Name=", 5) == 0) {
-            strncpy(app->name, line + 5, sizeof(app->name)-1);
+            strncpy(app->name, line + 5, sizeof(app->name) - 1);
+            app->name[sizeof(app->name) - 1] = '\0';
             app->name[strcspn(app->name, "\n")] = '\0';
         } else if (strncmp(line, "Exec=", 5) == 0) {
-            strncpy(app->exec, line + 5, sizeof(app->exec)-1);
+            strncpy(app->exec, line + 5, sizeof(app->exec) - 1);
+            app->exec[sizeof(app->exec) - 1] = '\0';
             app->exec[strcspn(app->exec, "\n")] = '\0';
         } else if (strncmp(line, "Icon=", 5) == 0) {
-            strncpy(app->icon, line + 5, sizeof(app->icon)-1);
+            strncpy(app->icon, line + 5, sizeof(app->icon) - 1);
+            app->icon[sizeof(app->icon) - 1] = '\0';
             app->icon[strcspn(app->icon, "\n")] = '\0';
         } else if (strncmp(line, "Type=", 5) == 0) {
-            strncpy(app->type, line + 5, sizeof(app->type)-1);
+            strncpy(app->type, line + 5, sizeof(app->type) - 1);
+            app->type[sizeof(app->type) - 1] = '\0';
             app->type[strcspn(app->type, "\n")] = '\0';
         } else if (strncmp(line, "NoDisplay=", 10) == 0) {
-            app->no_display = strncmp(line+10, "true", 4) == 0;
+            app->no_display = strncmp(line + 10, "true", 4) == 0;
         } else if (strncmp(line, "Hidden=", 7) == 0) {
-            app->hidden = strncmp(line+7, "true", 4) == 0;
+            app->hidden = strncmp(line + 7, "true", 4) == 0;
         }
     }
     fclose(f);
