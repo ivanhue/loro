@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(AppLauncher C)
+project(Loro C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
