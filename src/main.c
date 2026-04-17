@@ -14,14 +14,20 @@ int calculate_window_height(Theme* theme, int currentCount) {
 
 int main(void) {
     Theme theme;
+    char *pathApps[32];
+    int lenPaths = 0;
 
-    int err = theme_load(&theme, "../themes/base.ini");
+    int err = theme_load(&theme, "../themes/base.ini", pathApps, &lenPaths);
     if (err) {
         printf("Failed theme loading!\n");
         return 1;
     }
     App _internalApps[MAX_APPS];
-    int totalCount = apps_load(_internalApps, MAX_APPS);
+    // printf("lenPaths: %d\n", lenPaths);
+    // for (int i = 0; i < lenPaths; i++) {
+    //     printf("path[%d]: '%s'\n", i, pathApps[i]);
+    // }
+    int totalCount = apps_load(_internalApps, MAX_APPS, pathApps, lenPaths);
     const App *totalApps = _internalApps;
     App currentApps[MAX_SHOW_APPS];
     int currentCount = (totalCount > MAX_SHOW_APPS) ? MAX_SHOW_APPS : totalCount;

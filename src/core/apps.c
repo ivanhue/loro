@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "core/apps.h"
+// #include "ui/theme.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +29,6 @@ static void print_apps(const App *apps, int length) {
 static void parse_desktop_files(const char *path, App *app) {
     FILE *f = fopen(path, "r");
     if (!f) return;
-
     char line[512];
     while (fgets(line, sizeof(line), f)) {
         if (strncmp(line, "Name=", 5) == 0) {
@@ -52,33 +52,35 @@ static void parse_desktop_files(const char *path, App *app) {
     fclose(f);
 }
 
-int apps_load(App *out, int max) {
-    const char *dir_path = "/usr/share/applications";
-    DIR *dir = opendir(dir_path);
-    if (!dir) return 0;
-
+int apps_load(App *out, int max, char **pathApps, int lenPaths) {
     struct dirent *entry;
     int count = 0;
 
-    while ((entry = readdir(dir)) != NULL && count < max) {
-        const char *ext = strrchr(entry->d_name, '.');
-        if (!ext || strcmp(ext, ".desktop") != 0) continue;
+    for (int i=0; i<lenPaths; i++) {
+        DIR *dir = opendir(pathApps[i]);
+        if (!dir) continue;
+        while ((entry = readdir(dir)) != NULL && count < max) {
+            const char *ext = strrchr(entry->d_name, '.');
+            if (!ext || strcmp(ext, ".desktop") != 0) continue;
 
-        char full_path[512];
-        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, entry->d_name);
-        App app = {0};
-        parse_desktop_files(full_path, &app);
+            char full_path[512];
+            snprintf(full_path, sizeof(full_path), "%s/%s", pathApps[i], entry->d_name);
+            App app = {0};
+            parse_desktop_files(full_path, &app);
 
-        if (app.name[0] != '\0'
-            && strcmp(app.type, "Application") == 0
-            && !app.no_display
-            && !app.hidden
-        ) {
-            out[count++] = app;
+            if (app.name[0] != '\0'
+                && strcmp(app.type, "Application") == 0
+                && !app.no_display
+                && !app.hidden
+            ) {
+                out[count++] = app;
+                printf("app encontrada: %s\n", app.name);
+            } else {
+                printf("app descartada: %s\n", app.name);
+            }
         }
+        closedir(dir);
     }
-
-    closedir(dir);
     qsort(out, count, sizeof(App), compare_apps);
     return count;
 }
@@ -92,7 +94,7 @@ void init_current_apps(const App *totalApps, App *currentApps, int countTotal, i
     int to_copy = (countTotal > max_out) ? max_out : countTotal;
     *countCurrent = to_copy;
     memcpy(currentApps, totalApps, sizeof(App) * to_copy);
-    print_apps(currentApps, *countCurrent);
+    print_apps(totalApps, countTotal);
 }
 
 void update_apps_list(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, char *search, int max_out) {

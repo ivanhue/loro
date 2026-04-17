@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int theme_load(Theme* theme, char* pathTheme) {
+int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths) {
     FILE *f = fopen(pathTheme, "r");
     if (!f) return 1;
 
@@ -56,6 +56,14 @@ int theme_load(Theme* theme, char* pathTheme) {
             theme->width = strtol(line+6, NULL, 10);
         } else if (strncmp(line, "padding=", 8) == 0) {
             theme->padding = strtol(line+8, NULL, 10);
+        } else if (strncmp(line, "apps=", 5) == 0) {
+            int count = 0;
+            char *token = strtok(line+5, ";");
+            while (token != NULL) {
+                pathApps[count++] = strdup(token);
+                token = strtok(NULL, ";");
+                (*lenPaths)++;
+            }
         }
     }
 

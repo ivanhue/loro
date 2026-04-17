@@ -22,4 +22,4 @@ typedef struct {
     Font font;
 } Theme;
 
-int theme_load(Theme* theme, char* pathTheme);
+int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths);

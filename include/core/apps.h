@@ -11,7 +11,7 @@ typedef struct {
     int hidden;
 } App;
 
-int apps_load(App *out, int max);
+int apps_load(App *out, int max, char **pathApps, int lenPaths);
 void launch(App *app);
 void init_current_apps(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, int max_out);
 void update_apps_list(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, char *search, int max_out);
