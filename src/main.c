@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "raylib.h"
 // CORE
 #include "core/apps.h"
@@ -17,16 +18,15 @@ int main(void) {
     char *pathApps[32];
     int lenPaths = 0;
 
-    int err = theme_load(&theme, "../themes/base.ini", pathApps, &lenPaths);
+    char *home = getenv("HOME");
+    char configPath[512];
+    snprintf(configPath, sizeof(configPath), "%s/.config/loro/config.ini", home);
+    int err = theme_load(&theme, configPath, pathApps, &lenPaths);
     if (err) {
         printf("Failed theme loading!\n");
         return 1;
     }
     App _internalApps[MAX_APPS];
-    // printf("lenPaths: %d\n", lenPaths);
-    // for (int i = 0; i < lenPaths; i++) {
-    //     printf("path[%d]: '%s'\n", i, pathApps[i]);
-    // }
     int totalCount = apps_load(_internalApps, MAX_APPS, pathApps, lenPaths);
     const App *totalApps = _internalApps;
     App currentApps[MAX_SHOW_APPS];
@@ -44,6 +44,9 @@ int main(void) {
     InitWindow(theme.width, height, "Loro Launcher");
     SetTargetFPS(60);
     SetWindowState(FLAG_WINDOW_UNDECORATED);
+
+    theme_load_assets(&theme);
+
     init_current_apps(totalApps, currentApps, totalCount, &currentCount, MAX_SHOW_APPS);
 
     while (!WindowShouldClose()) {
@@ -69,6 +72,7 @@ int main(void) {
         EndDrawing();
     }
 
+    UnloadFont(theme.font);
     CloseWindow();
 
     return 0;
