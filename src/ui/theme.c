@@ -50,8 +50,9 @@ int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths) {
             theme->verticalSpacing = strtol(line+16, NULL, 10);
         } else if (strncmp(line, "font=", 5) == 0) {
             char pathFont[512];
-            strcpy(pathFont, line+5);
-            theme->font = LoadFontEx(pathFont, 32, 0, 255);
+            strncpy(pathFont, line + 5, sizeof(pathFont) - 1);
+            pathFont[sizeof(pathFont) - 1] = '\0';
+            theme->fontPath = strdup(pathFont);
         } else if (strncmp(line, "width=", 6) == 0) {
             theme->width = strtol(line+6, NULL, 10);
         } else if (strncmp(line, "padding=", 8) == 0) {
@@ -69,4 +70,11 @@ int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths) {
 
     fclose(f);
     return 0;
+}
+
+void theme_load_assets(Theme *theme) {
+    theme->font = LoadFontEx(theme->fontPath, 32, NULL, 255);
+    if (theme->font.texture.id <= 0) {
+        theme->font = GetFontDefault();
+    }
 }

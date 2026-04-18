@@ -87,9 +87,6 @@ int apps_load(App *out, int max, char **pathApps, int lenPaths) {
                 && !app.hidden
             ) {
                 out[count++] = app;
-                printf("app encontrada: %s\n", app.name);
-            } else {
-                printf("app descartada: %s\n", app.name);
             }
         }
         closedir(dir);
