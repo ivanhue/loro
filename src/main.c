@@ -10,7 +10,10 @@
 #include "ui/apps.h"
 
 int calculate_window_height(Theme* theme, int currentCount) {
-    return 10 + (theme->padding * 2) + (currentCount * (theme->fontSize + theme->verticalSpacing));
+    // padding + search bar + app list + vertical spacing
+    return 2*(theme->padding) + (theme->fontSize) +
+           (currentCount * theme->fontSize) +
+           ((currentCount - 1) * theme->verticalSpacing);
 }
 
 int main(void) {
@@ -58,7 +61,7 @@ int main(void) {
         if (currentCount != lastCount) {
             int newHeight = calculate_window_height(&theme, currentCount);
 
-            if (newHeight < 100) newHeight = 100;
+            if (newHeight < 80) newHeight = 80;
 
             SetWindowSize(theme.width, newHeight);
         }
