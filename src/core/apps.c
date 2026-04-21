@@ -3,6 +3,7 @@
 // #include "ui/theme.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <dirent.h>
 
@@ -10,6 +11,15 @@ static int compare_apps(const void *a, const void *b) {
     const App *app_a = (const App *)a;
     const App *app_b = (const App *)b;
     return strcmp(app_a->name, app_b->name);
+}
+
+static bool app_exists(App *list, int size, const char *name) {
+    for (int i=0; i<size; i++) {
+        if (strcmp(list[i].name, name) == 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 static void print_apps(const App *apps, int length) {
@@ -85,6 +95,7 @@ int apps_load(App *out, int max, char **pathApps, int lenPaths) {
                 && strcmp(app.type, "Application") == 0
                 && !app.no_display
                 && !app.hidden
+                && !app_exists(out, count, app.name)
             ) {
                 out[count++] = app;
             }
