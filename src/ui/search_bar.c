@@ -56,12 +56,18 @@ void draw_search_bar(Theme* theme, char value[127][4], int* frames, int* letterC
     Vector2 tmp = {textBox.x, textBox.y};
     DrawTextEx(theme->font, utf8String, tmp, theme->fontSize, theme->horizontalSpacing, theme->fg);
     int key = GetKeyPressed();
-    if ((*frames/20)%2 == 0 && !(key>=32 && key<=125)) {
-        DrawText(
+    Vector2 textMeasures = MeasureTextEx(theme->font, utf8String, theme->fontSize, theme->horizontalSpacing);
+    Vector2 position = {
+        (int)textBox.x + 5 + (int)textMeasures.x,
+        (int)textBox.y + 2
+    };
+    if ((*frames/20)%2 == 0) {
+        DrawTextEx(
+            theme->font,
             "_",
-            (int)textBox.x+5+MeasureText(utf8String, theme->fontSize),
-            (int)textBox.y+2,
+            position,
             theme->fontSize,
+            theme->horizontalSpacing,
             theme->fg
         );
     }
