@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "ui/theme.h"
 #include "core/apps.h"
-// #include <stdio.h>
 #include <string.h>
 
 static void joinText(char s[127][4], int length, char *dest) {
@@ -53,7 +52,7 @@ void update_search_bar(Theme* theme, char value[127][4], int* frames, int* lette
 void draw_search_bar(Theme* theme, char value[127][4], int* frames, int* letterCount, char utf8String[127*4]) {
     joinText(value, *letterCount, utf8String);
     Rectangle textBox = { (int)theme->padding/2, (int)theme->padding/2, theme->width-theme->padding, theme->fontSize+5 };
-    DrawLine(10, 36, 780, 36, theme->fg);
+    DrawLine(10, theme->fontSize+12, 780, theme->fontSize+12, theme->fg);
     Vector2 tmp = {textBox.x, textBox.y};
     DrawTextEx(theme->font, utf8String, tmp, theme->fontSize, theme->horizontalSpacing, theme->fg);
     int key = GetKeyPressed();
