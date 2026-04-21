@@ -15,11 +15,13 @@ int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths) {
         if (strncmp(line, "bg=", 3) == 0) {
             if (strcmp(line+3, "") == 0) continue;
             unsigned int hexBg = strtoul(line+4, NULL, 16);
+            hexBg = (hexBg << 8) | 0xFF;
             Color bgColor = GetColor(hexBg);
             theme->bg=bgColor;
         } else if (strncmp(line, "fg=", 3) == 0) {
             if (strcmp(line+3, "") == 0) continue;
             unsigned int hexFg = strtoul(line+4, NULL, 16);
+            hexFg = (hexFg << 8) | 0xFF;
             Color fgColor = GetColor(hexFg);
             theme->fg=fgColor;
         } else if (strncmp(line, "accent=", 7) == 0) {
