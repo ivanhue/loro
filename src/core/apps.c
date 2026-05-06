@@ -111,14 +111,14 @@ void launch(App *app) {
     execlp("sh", "sh", "-c", app->exec, NULL);
 }
 
-void init_current_apps(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, int max_out) {
+void init_current_apps(const App *totalApps, App *currentApps, int countTotal, int *countCurrent, int max_out) {
     int to_copy = (countTotal > max_out) ? max_out : countTotal;
     *countCurrent = to_copy;
     memcpy(currentApps, totalApps, sizeof(App) * to_copy);
-    print_apps(totalApps, countTotal);
+    // print_apps(totalApps, countTotal);
 }
 
-void update_apps_list(const App *totalApps, App *currentApps, int countTotal, int* countCurrent, char *search, int max_out) {
+void update_apps_list(const App *totalApps, App *currentApps, int countTotal, int *countCurrent, char *search, int max_out) {
     if (search == NULL || search[0] == '\0') {
         init_current_apps(totalApps, currentApps, countTotal, countCurrent, max_out);
         // print_apps(currentApps, *countCurrent);

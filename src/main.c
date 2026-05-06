@@ -9,7 +9,7 @@
 #include "ui/search_bar.h"
 #include "ui/apps.h"
 
-int calculate_window_height(Theme* theme, int currentCount) {
+int calculate_window_height(Theme *theme, int currentCount) {
     // padding + search bar + app list + vertical spacing
     return 2*(theme->padding) + (theme->fontSize) +
            (currentCount * theme->fontSize) +

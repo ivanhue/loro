@@ -10,7 +10,7 @@ static void joinText(char s[127][4], int length, char *dest) {
     }
 }
 
-void update_search_bar(Theme* theme, char value[127][4], int* frames, int* letterCount, int* currentFrame, const App *totalApps, App *currentApps, int totalCount, int* currentCount, int max_out, int* cursor) {
+void update_search_bar(Theme *theme, char value[127][4], int *frames, int *letterCount, int *currentFrame, const App *totalApps, App *currentApps, int totalCount, int *currentCount, int max_out, int *cursor) {
     bool changed = false;
     int key = GetCharPressed();
 
@@ -49,7 +49,7 @@ void update_search_bar(Theme* theme, char value[127][4], int* frames, int* lette
     }
 }
 
-void draw_search_bar(Theme* theme, char value[127][4], int* frames, int* letterCount, char utf8String[127*4]) {
+void draw_search_bar(Theme *theme, char value[127][4], int *frames, int *letterCount, char utf8String[127*4]) {
     joinText(value, *letterCount, utf8String);
     Rectangle textBox = { (int)theme->padding/2, (int)theme->padding/2, theme->width-theme->padding, theme->fontSize+5 };
     DrawLine(10, theme->fontSize+12, 780, theme->fontSize+12, theme->fg);

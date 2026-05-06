@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths) {
+int theme_load(Theme *theme, char *pathTheme, char **pathApps, int *lenPaths) {
     FILE *f = fopen(pathTheme, "r");
     if (!f) return 1;
 
