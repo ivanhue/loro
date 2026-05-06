@@ -23,5 +23,5 @@ typedef struct {
     Font font;
 } Theme;
 
-int theme_load(Theme* theme, char* pathTheme, char **pathApps, int *lenPaths);
+int theme_load(Theme *theme, char *pathTheme, char **pathApps, int *lenPaths);
 void theme_load_assets(Theme *theme);

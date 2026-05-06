@@ -2,6 +2,6 @@
 #include "ui/window.h"
 #include "ui/theme.h"
 
-void draw_window(Theme* theme) {
+void draw_window(Theme *theme) {
     ClearBackground(theme->bg);
 }
